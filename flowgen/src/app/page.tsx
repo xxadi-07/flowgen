@@ -4,7 +4,7 @@ const Page = () => {
   return (
     <div className="min-h-screen min-w-screen flex items-center justify-center">
       <Button>
-        Click me
+        Click me 2
       </Button>
     </div>
   );
