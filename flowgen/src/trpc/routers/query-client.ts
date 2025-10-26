@@ -1,6 +1,10 @@
 // utils/queryClient.ts
 import { QueryClient, dehydrate, hydrate, Query } from '@tanstack/react-query';
-// import superjson from 'superjson'; // optional, if you want custom serialization
+/**
+ * Create a QueryClient configured with a 30-second default query stale time.
+ *
+ * @returns A new QueryClient instance with `queries.staleTime` set to 30,000 milliseconds.
+ */
 
 export function makeQueryClient() {
   return new QueryClient({
@@ -13,8 +17,12 @@ export function makeQueryClient() {
 }
 
 /**
- * Dehydrate query client state with custom logic
- * E.g., include queries that are pending or successful
+ * Produce a dehydrated state of the given QueryClient including only selected queries.
+ *
+ * Only queries whose state status is `'success'` or `'pending'` are included in the result.
+ *
+ * @param queryClient - The QueryClient to dehydrate
+ * @returns A dehydrated state containing only queries with status `'success'` or `'pending'`
  */
 export function customDehydrate(queryClient: QueryClient) {
   return dehydrate(queryClient, {
@@ -24,7 +32,10 @@ export function customDehydrate(queryClient: QueryClient) {
 }
 
 /**
- * Hydrate query client with pre-fetched state
+ * Apply a dehydrated query state to an existing QueryClient.
+ *
+ * @param queryClient - The QueryClient instance to hydrate
+ * @param state - The dehydrated state produced by `dehydrate`
  */
 export function customHydrate(queryClient: QueryClient, state: ReturnType<typeof dehydrate>) {
   hydrate(queryClient, state);
