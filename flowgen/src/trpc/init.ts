@@ -34,8 +34,11 @@ export const baseProcedure = t.procedure;
 export const createCallerFactory = t.createCallerFactory;
 
 /**
- * Optional: Dynamic import helper
- * If you want to lazy-load tRPC for SSR or Next.js server-side separation
+ * Creates a lazily-initialized set of tRPC helpers for server-side use (e.g., SSR or Next.js server separation).
+ *
+ * Loads @trpc/server dynamically and returns helper bindings from a newly created tRPC instance.
+ *
+ * @returns An object with `createTRPCRouter`, `baseProcedure`, and `createCallerFactory` bound to the new tRPC instance
  */
 export async function getTRPC() {
   const { initTRPC } = await import('@trpc/server');
