@@ -1,5 +1,8 @@
 // utils/trpc.ts
-import { initTRPC } from '@trpc/server';
+import { auth } from '@/lib/auth';
+import { initTRPC, TRPCError } from '@trpc/server';
+import next from 'next';
+import { headers } from 'next/headers';
 import { cache } from 'react';
 // import superjson from 'superjson'; // optional if you want data serialization
 
@@ -32,19 +35,19 @@ const t = initTRPC.create({
 export const createTRPCRouter = t.router;
 export const baseProcedure = t.procedure;
 export const createCallerFactory = t.createCallerFactory;
-
-/**
- * Optional: Dynamic import helper
- * If you want to lazy-load tRPC for SSR or Next.js server-side separation
- */
-export async function getTRPC() {
-  const { initTRPC } = await import('@trpc/server');
-  const tDynamic = initTRPC.create({
-    // transformer: superjson,
+export const protectedProcedure = baseProcedure.use(async ({ ctx, next }) => {
+  // your session logic, for example:
+  const session = await auth.api.getSession({
+    headers: await headers(),
   });
-  return {
-    createTRPCRouter: tDynamic.router,
-    baseProcedure: tDynamic.procedure,
-    createCallerFactory: tDynamic.createCallerFactory,
-  };
-}
+
+  if (!session) {
+    throw new TRPCError({
+      code: "UNAUTHORIZED",
+      message: "Unauthorized",
+    });
+  }
+
+  return next({ ctx: { ...ctx, auth: session } });
+});
+
