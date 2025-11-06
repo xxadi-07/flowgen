@@ -83,6 +83,7 @@ return (
                   type="button"
                   disabled={isPending}
                 >
+                   <Image src="/logos/google.svg" width={20} height={20} alt="Google logo" />
                   Continue with Google
                 </Button>
                 <Button 
@@ -91,6 +92,7 @@ return (
                   type="button"
                   disabled={isPending}
                 >
+                  <Image alt="Github" src = "/logos/github.svg" width={20} height={20}/>
                   Continue with GitHub
                 </Button>
               </div>
